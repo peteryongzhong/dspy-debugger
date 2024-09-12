@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      crossorigin="anonymous"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css"
+    />
+    <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/datatables.net-colresize-unofficial@latest/jquery.dataTables.colResize.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/datatables.net-colresize-unofficial@latest/jquery.dataTables.colResize.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://rawcdn.githack.com/abodelot/jquery.json-viewer/dd30cff8da08b9b80e73d9957541f8e4be72b3ec/json-viewer/jquery.json-viewer.css"
+    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
+    <script src="https://rawcdn.githack.com/abodelot/jquery.json-viewer/dd30cff8da08b9b80e73d9957541f8e4be72b3ec/json-viewer/jquery.json-viewer.js"></script>
+    <title>DSPy Debug Visualizer</title>
+  </head>
+  <body>
+    <style>
+      table.dataTable tbody tr {
+        background-color: #4d4d4d;
+      }
+
+      .dataTables_wrapper .dataTables_length,
+      .dataTables_wrapper .dataTables_filter,
+      .dataTables_wrapper .dataTables_info,
+      .dataTables_wrapper .dataTables_processing,
+      .dataTables_wrapper .dataTables_paginate {
+        color: #a8a8a8;
+      }
+
+      .json-string {
+        color: #9dc899;
+      }
+      .json-literal {
+        color: #7667e0;
+        font-weight: bold;
+      }
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        font-family: sans-serif;
+        background-color: black;
+        color: white;
+      }
+      h3 {
+        text-align: center;
+      }
+      .wrapper {
+        display: grid;
+        grid-template-columns: 50% 50%;
+        height: 100vh;
+        width: 100vw;
+      }
+      #visualization {
+        grid-column: 1 / 2;
+        grid-row: 1;
+      }
+      #graph{
+        height: 100%;
+        width: 100%;
+      }
+      #meta-data {
+        height: 100vh;
+        grid-column: 2 / 3;
+        grid-row: 1;
+        overflow: auto;
+      }
+      #footer-float-div {
+        position: fixed;
+        height: 50px;
+        width: 50px;
+        bottom: 10px;
+        right: 10px;
+      }
+      table {
+        width: 100%;
+      }
+      select {
+        background-color: #333333;
+        color: white;
+      }
+      textarea {
+        background-color: #333333;
+        color: white;
+        padding: 10px;
+        width: 90%;
+        line-height: 1.5;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        box-shadow: 1px 1px 1px #999;
+        font-size: 1em;
+      }
+      pre {
+   white-space: pre-wrap;
+}
+
+/* CSS */
+.button-1 {
+  background-color: #142a9c;
+  border-radius: 8px;
+  border-style: none;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  cursor: pointer;
+  display: inline-block;
+  font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  height: 40px;
+  line-height: 20px;
+  list-style: none;
+  margin: 0;
+  outline: none;
+  padding: 10px 16px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  transition: color 100ms;
+  vertical-align: baseline;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.button-1:hover,
+.button-1:focus {
+  background-color: rgb(70, 70, 207);
+}
+    </style>
+    <div class="wrapper">
+      <div id="meta-data">
+        <div id="generic-info" style="">
+          <h3>LM Setting</h3>
+          <pre id="lm-setting-pre"></pre>
+          <h3>RM Setting</h3>
+          <pre id="rm-setting-pre"></pre>
+        </div>
+        <div id="retriver-info" style="display: none">
+          <h3>Retriver Info</h3>
+          <h3>k is <span id="retriver-k-span"> </span></h3>
+        </div>
+        <div id="module-info" style="display: none">
+          <h3>Module Class: <span id="module-class-span"></span></h3>
+          <button id="module-btn" class="button-1" role="button"
+            style="
+              height: 5vh;
+              width: fit-content;
+            "
+          > <i class="fa fa-cogs"></i> Shown in VSCode
+          </button>
+         
+        </div>
+        <div id="predictor-info" style="display: none">
+          <h3>Signature Instuctions</h3>
+          <textarea id="signature-instruction-textarea"></textarea>
+          <div id="select-sig-div" style>
+            <h3>Display Signature or Extended Signature</h3>
+            <select id="select-sig-id">
+              <option value="signature">Display Signature</option>
+              <option value="extended_signature">
+                Display Extended Signature (If Applicable)
+              </option>
+            </select>
+          </div>
+          <div id="signature-div">
+            <table id="signature-table"></table>
+          </div>
+          <h3>Demonstrations</h3>
+          <div id="demos-div">
+            <table id="demos-table"></table>
+          </div>
+        </div>
+        <div id="trace-info" style="display: none">
+          <h3>Module Class: <span id="module-class-span"></span></h3>
+          <button id="trace-module-btn" class="button-1" role="button"
+            style="
+              height: 5vh;
+              width: fit-content;
+            "
+          > <i class="fa fa-cogs"></i> Shown in VSCode </button>
+
+          <h3>args:</h3>
+          <pre id="trace-args-pre" style="width: 90%;"></pre>
+          <h3>kwargs:</h3>
+          <pre id="trace-kwargs-pre" style="width: 90%;"></pre>
+          <h3>result</h3>
+          <pre id="trace-result-pre" style="width: 90%;"></pre>
+        </div>
+      </div>
+      <div id ="visualization">
+        <div id="select-vis-div" style ="padding-left: 1%;">
+          <h3>Static Module or Dyanmic Trace</h3>
+          <select id="select-vis-id">
+            <option value="static">Display Static Module Graph</option>
+            <option value="dyanmic">
+              Display Dyanmic Traces
+            </option>
+          </select>
+        </div>
+      <div id="graph"></div>
+      <div id="dyn-trace"  style="display: none;"></div>
+     </div>
+    </div>
+    <div id="footer-float-div">
+      <button
+        id="back-btn"
+        style="
+          border-radius: 50%;
+          height: 100%;
+          width: 100%;
+          background-color: rgb(249, 109, 109);
+          outline: none;
+        "
+      >
+        <i class="fa fa-arrow-left"></i>
+      </button>
+    </div>
+    <script>
+    
+      let moduleInfo = JSON.parse(<<moduleInfo>>);
+      let lmInfo = JSON.parse(<<lmInfo>>);
+      let rmInfo = JSON.parse(<<rmInfo>>);
+      let trace_filepath = "<<JSONTraceFilePath>>";
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+    <!-- <script src="bundle.js" defer></script> -->
+    <script src="<<visualJSFilePath>>" defer></script>
+  </body>
+</html>

@@ -1,0 +1,13 @@
+{
+	"compilerOptions": {
+		"module": "commonjs",
+		"target": "es2023",
+		"lib": ["es2023", "dom"],
+		"outDir": "out",
+		"sourceMap": true,
+		"rootDir": "src",
+		"strict": false,
+		"noUnusedLocals": false,
+	},
+	"exclude": ["node_modules"]
+}

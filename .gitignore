@@ -1,0 +1,12 @@
+.DS_Store
+npm-debug.log
+Thumbs.db
+*/node_modules/
+*/out/
+*/.vs/
+tsconfig.lsif.json
+*.lsif
+*.db
+dist/
+media/bundle.js
+media/bundle.js.map
