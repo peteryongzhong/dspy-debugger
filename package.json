@@ -14,12 +14,6 @@
   ],
   "main": "./dist/extension.js",
   "contributes": {
-    "commands": [
-      {
-        "command": "debugtest.helloWorld",
-        "title": "Hello World"
-      }
-    ],
     "views": {
       "debug": [
         {
