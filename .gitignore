@@ -11,3 +11,4 @@ tsconfig.lsif.json
 dist/
 media/bundle.js
 media/bundle.js.map
+media/trace*

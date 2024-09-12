@@ -293,13 +293,29 @@ export function activate(context: vscode.ExtensionContext) {
         ).result
       )
     );
+    const tempJSONTraceFile1 = vscode.Uri.joinPath(
+      context.extensionUri,
+      "media",
+      "trace1.json"
+    );
 
-    let traceInfo = JSON5.parse((await debugProxy.evaluate({
-          expression: `${e.selection[0].varName}.trace_info()`,
-          frameId: CurrentThreadAndStack.frameId,
-          context: "clipboard",
-        })
-      ).result.slice(1, -1));
+    let raw_trace = (await debugProxy.evaluate({
+              expression: `${e.selection[0].varName}.trace_info()`,
+              frameId: CurrentThreadAndStack.frameId,
+              context: "clipboard",
+            })
+          ).result;
+    let first_char = raw_trace[0];
+    raw_trace= raw_trace.replaceAll(`\\\\`, `\\`);
+    if(first_char === `'`)
+    {
+      raw_trace = raw_trace.replaceAll(`\\'`, `'`);
+    }
+    else{
+      raw_trace = raw_trace.replaceAll(`\\"`, `"`);
+    }
+
+    let traceInfo = JSON5.parse(raw_trace.slice(1, -1));
 
     const tempJSONTraceFile = vscode.Uri.joinPath(
       context.extensionUri,

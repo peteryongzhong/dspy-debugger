@@ -1,71 +1,42 @@
-# debugtest README
+# DSPy Debugger VSCode Plugin
 
-This is the README for your extension "debugtest". After writing up a brief description, we recommend including the following sections.
+WARNING: RESEARCH IN PROGRESS (meaning it's hella unstable and probably won't work/compile)
 
-## Features
+This is the repo for a DSPy Debugger that can be integrated with VSCode to give developers a *live* debugging experience with LLM models when programming in the DSPy framework. This work aims to extend the myraid of tracing and observability tools that offer posteriori analysis of the DSPy execution traces, and aim to provide more inspection and interactability opportunities. This tool aims to serve the role of a traditional debugger, but provides features helpful for the needs of DSPy and LM programming. 
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+# How to Run?
 
-For example if there is an image subfolder under your extension project workspace:
+Whilst the goal is to transparently interact with DSPy without modification to its core code, the first iteration of this tool requires some minor changes to its codebase. Please refer to this feature branch () and make sure there exist an virtual environment in your machine in which the DSPy library installed points to the feature branch.  
 
-\!\[feature X\]\(images/feature-x.png\)
+Open the project in VSCode and ensure that the VSCode Extension Tester (https://marketplace.visualstudio.com/items?itemName=ms-vscode.extension-test-runner) is installed. Run `node esbuild.js` to compile the relevant code, and run the project to launch a VSCode instance with the debugger extension installed. 
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+# Current Features 
 
-## Requirements
+## DSPy Variable 
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+During a debugging sesson, developers could see a list variables in scope that could be inspected using the DSPy Debugger. 
 
-## Extension Settings
+![DSPy Variables](images/dspyvar.png)
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+## DSPy Module Visualization
 
-For example:
+By pressing on the variables, developers are shown additional information like the structure of the module:
 
-This extension contributes the following settings:
+![DSPy Module Visualization 1](images/dspymoduleVis1.png)
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+For more complex modules, this could be helpful:
 
-## Known Issues
+![DSPy Module Visualization 2](images/dspymodulevis2.png)
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+## DSPy Metadata Inspection
 
-## Release Notes
+You could press on a node in the graph to inspect the metadata(like signature, prompt and demos) for a module, and even to open it directly in VSCode to inspect its source code.
 
-Users appreciate release notes as you update your extension.
+![DSPy Module Metadata 1](images/dspymodulemetadata.png)
 
-### 1.0.0
+## DSPy Dynamic Trace Inspection 
 
-Initial release of ...
+To see how your program has been running, and to understand how the optimizers work, the DSPy debugger provides a way of visualizing the traces in a tree setting and the metadata with the trace can be displayed. 
 
-### 1.0.1
 
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+![DSPy Trace](images/dspytrace.png)
