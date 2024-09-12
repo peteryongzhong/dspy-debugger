@@ -6,7 +6,7 @@ This is the repo for a DSPy Debugger that can be integrated with VSCode to give 
 
 # How to Run?
 
-Whilst the goal is to transparently interact with DSPy without modification to its core code, the first iteration of this tool requires some minor changes to its codebase. Please refer to this feature branch () and make sure there exist an virtual environment in your machine in which the DSPy library installed points to the feature branch.  
+Whilst the goal is to transparently interact with DSPy without modification to its core code, the first iteration of this tool requires some minor changes to its codebase. Please refer to this feature branch (https://github.com/peteryongzhong/dspy) and make sure there exist an virtual environment in your machine in which the DSPy library installed points to the feature branch.  
 
 Open the project in VSCode and ensure that the VSCode Extension Tester (https://marketplace.visualstudio.com/items?itemName=ms-vscode.extension-test-runner) is installed. Run `node esbuild.js` to compile the relevant code, and run the project to launch a VSCode instance with the debugger extension installed. 
 
